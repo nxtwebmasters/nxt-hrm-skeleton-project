@@ -7,7 +7,7 @@ services:
    container_name: hrm-dashboard
    restart: always
    environment:
-     BACKEND_URL: "http://hrm-mongo-apis:5000"
+     BACKEND_URL: "http://localhost:5000/api"
      ADMIN_URL: "https://chatsolution.expertflow.com/unified-admin"
    networks:
      - internal_net
