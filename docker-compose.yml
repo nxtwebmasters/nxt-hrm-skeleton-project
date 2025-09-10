@@ -1,21 +1,16 @@
-version: "3.8"
-
 services:
   # HRM DASHBOARD FRONTEND
-  #hrm-dashboard:
-   # image: pandanxt/hrm-dashboard:1.0.1
-   # ports:
-   #   - "6001:80"
-   # container_name: hrm-dashboard
-   # restart: always
-   # environment:
-   #   HRM_BACKEND_URL: "http://hrm-mongo-apis:5000"
-    #  DEFAULT_USER_ICON: "https://file-hrm.nxtwebmasters.com/images/default-user.webp"
-   # depends_on:
-   #   mongodb:
-   #     condition: service_healthy
-   # networks:
-   #   - internal_net
+  hrm-dashboard:
+   image: pandanxt/nxt-hrm-dashboard:develop-1.0.0
+   ports:
+     - "6001:80"
+   container_name: hrm-dashboard
+   restart: always
+   environment:
+     BACKEND_URL: "http://hrm-mongo-apis:5000"
+     ADMIN_URL: "https://chatsolution.expertflow.com/unified-admin"
+   networks:
+     - internal_net
 
   # HRM BACKEND API
   hrm-mongo-apis:
@@ -26,8 +21,10 @@ services:
     restart: always
     env_file:
       - hrm-backend.env
+    volumes:
+      - uploads_data:/app/uploads  # Persist uploads folder
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]  # Changed port to 5000
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/health"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -60,6 +57,7 @@ services:
 
 volumes:
   mongodb_data:
+  uploads_data:  # Volume for persistent file storage
 
 networks:
   internal_net:
